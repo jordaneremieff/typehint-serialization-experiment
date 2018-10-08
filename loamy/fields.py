@@ -1,5 +1,5 @@
 from typing import Any, Union
-from .exceptions import ValidationError
+from loamy.exceptions import ValidationError
 
 
 class Field:

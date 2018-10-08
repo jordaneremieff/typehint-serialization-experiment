@@ -18,3 +18,25 @@ def test_serializer_fields():
     serializer = MySerializer()
     serializer(mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0)
     serializer.validate()
+
+
+class test_serializer_dict_fields:
+    """Ensure dict args serialize and validate for all field defintions."""
+
+    class MySerializer(Serializer):
+        mystr = StrField()
+        myint = IntField()
+        mybytes = BytesField()
+        myfloat = FloatField()
+        mynumber = NumberField()
+
+    myargs = {
+        "mystr": "mystr",
+        "myint": 1,
+        "mybytes": b"mybytes",
+        "myfloat": 0.01,
+        "mynumber": 1.0,
+    }
+    serializer = MySerializer()
+    serializer(**myargs)
+    serializer.validate()
