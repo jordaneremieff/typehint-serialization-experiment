@@ -3,6 +3,9 @@ from loamy.exceptions import ValidationError
 
 
 class Field:
+
+    field_name: str = None
+
     def __init__(self) -> None:
         self.field_types: list = []
 
