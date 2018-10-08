@@ -34,11 +34,21 @@ class StrField(Field):
     field_value: Union[str, bytes] = None
 
 
+class BytesField(Field):
+
+    field_value: bytes = None
+
+
 class IntField(Field):
 
     field_value: int = None
 
 
-class BytesField(Field):
+class FloatField(Field):
 
-    field_value: bytes = None
+    field_value: float = None
+
+
+class NumberField(Field):
+
+    field_value: Union[int, float]
