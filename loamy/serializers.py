@@ -11,7 +11,7 @@ class Serializer:
             field = self.fields[name]
             field.value = value
             # Unless explicitly defined in the field definition, a field does not have
-            # a name. Assign it here if it is `None`.
+            # a name, assign it here if undefined.
             if field.name is None:
                 field.name = name
 
@@ -22,7 +22,7 @@ class Serializer:
 
     def get_field_types(self):
         """Get the fields defined on the serializer instance."""
-        # todo: Build typelist elsewhere to allow custom type defintions?
+        # todo: Build typelist elsewhere to allow custom type definitions?
         attrs = {
             k: v
             for k, v in getmembers(self)
