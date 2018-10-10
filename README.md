@@ -1,5 +1,10 @@
 # loamy
 
-Something something something REST APIs...
+An experiment into simple, framework-agnostic REST API serialization/de-serialization using type annotations.
 
-Not sure what I'm doing with this yet.
+## todo
+
+- Determine how to handle validation state transitions
+- More complex JSON serializer
+- Nested/complex objects
+- App examples

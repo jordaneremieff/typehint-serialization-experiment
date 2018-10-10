@@ -1,26 +1,38 @@
 import json
+from inspect import getmembers
+from loamy.fields import String, Integer, Float, Number
 
 
 class Serializer:
-    def __init__(self) -> None:
-        self.fields: list = []
-
-    def __call__(self, **kwargs) -> None:
-        """Retrieve the fields and set the values to be validated."""
-        for field_name, field_value in kwargs.items():
-            field = getattr(self, field_name)
-            field.field_value = field_value
-            field.field_name = field_name
-            self.fields.append(field)
+    def __init__(self, **kwargs) -> None:
+        """Build `fields` dict from the defined field types and assign the field values."""
+        self.fields: dict = self.get_field_types()
+        for name, value in kwargs.items():
+            field = self.fields[name]
+            field.value = value
+            # Unless explicitly defined in the field definition, a field does not have
+            # a name. Assign it here if it is `None`.
+            if field.name is None:
+                field.name = name
 
     def validate(self) -> None:
         """Call the validation method of each field."""
-        for field in self.fields:
+        for field in self.fields.values():
             field.validate()
+
+    def get_field_types(self):
+        """Get the fields defined on the serializer instance."""
+        # todo: Build typelist elsewhere to allow custom type defintions?
+        attrs = {
+            k: v
+            for k, v in getmembers(self)
+            if isinstance(v, (String, Integer, Float, Number))
+        }
+        return attrs
 
     def get_dict(self) -> dict:
         """Return a dict containing the field values."""
-        return {field.field_name: field.field_value for field in self.fields}
+        return {field.name: field.value for field in self.fields.values()}
 
     def get_json(self) -> str:
         """Return a JSON-dict containing the field values."""

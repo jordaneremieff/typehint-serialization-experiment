@@ -1,35 +1,26 @@
-import json
-
 from loamy.serializers import Serializer
-from loamy.fields import StrField, BytesField, IntField, FloatField, NumberField
+from loamy.fields import String, Integer, Float, Number
 
 
-def get_mock_serializer():
-    class MySerializer(Serializer):
-        mystr = StrField()
-        myint = IntField()
-        mybytes = BytesField()
-        myfloat = FloatField()
-        mynumber = NumberField()
-
-    return MySerializer()
+class MockSerializer(Serializer):
+    mystr = String()
+    mybytes = String()
+    myint = Integer()
+    myfloat = Float()
+    mynumber = Number()
 
 
 def test_serializer_fields():
-    """
-    Ensure base serializer behaviour allows for all field defintions and validates
-    correctly typed parameters successfully.
-    """
+    """Ensure base serializer behaviour validates all field definitions."""
 
-    serializer = get_mock_serializer()
-    serializer(mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0)
+    serializer = MockSerializer(
+        mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0
+    )
     serializer.validate()
 
 
 class test_serializer_dict_fields:
     """Ensure dict args serialize and validate for all field defintions."""
-
-    serializer = get_mock_serializer()
 
     myargs = {
         "mystr": "mystr",
@@ -38,13 +29,14 @@ class test_serializer_dict_fields:
         "myfloat": 0.01,
         "mynumber": 1.0,
     }
-    serializer(**myargs)
+    serializer = MockSerializer(**myargs)
     serializer.validate()
 
 
 class test_serializer_to_dict:
-    serializer = get_mock_serializer()
-    serializer(mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0)
+    serializer = MockSerializer(
+        mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0
+    )
     serializer.validate()
     assert serializer.get_dict() == {
         "mystr": "mystr",
@@ -56,15 +48,9 @@ class test_serializer_to_dict:
 
 
 class test_serializer_to_json:
-    serializer = get_mock_serializer()
-    serializer(mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0)
-    serializer.validate()
-    assert serializer.get_json() == json.dumps(
-        {
-            "mystr": "mystr",
-            "myint": 1,
-            "mybytes": "mybytes",
-            "myfloat": 0.01,
-            "mynumber": 1.0,
-        }
+    serializer = MockSerializer(
+        mystr="mystr", myint=1, mybytes=b"mybytes", myfloat=0.01, mynumber=1.0
     )
+    serializer.validate()
+    json_s = '{"mybytes": "mybytes", "myfloat": 0.01, "myint": 1, "mynumber": 1.0, "mystr": "mystr"}'
+    assert serializer.get_json() == json_s
