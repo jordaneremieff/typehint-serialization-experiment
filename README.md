@@ -1,5 +1,8 @@
 # loamy
 
+![build](https://travis-ci.com/erm/loamy.svg?branch=master)
+![black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
 An experiment into simple, framework-agnostic REST API serialization/de-serialization using type annotations.
 
 
