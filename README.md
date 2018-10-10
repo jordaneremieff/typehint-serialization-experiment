@@ -3,9 +3,9 @@
 An experiment into simple, framework-agnostic REST API serialization/de-serialization using type annotations.
 
 
-## Example
+## Usage
 
-This is very likely to change a bit:
+This may change quite a bit as time goes on:
 
 ```python3
 from loamy.serializers import Serializer
