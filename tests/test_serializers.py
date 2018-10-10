@@ -20,7 +20,7 @@ def test_serializer_fields():
 
 
 class test_serializer_dict_fields:
-    """Ensure dict args serialize and validate for all field defintions."""
+    """Ensure dict args serialize and validate for all field definitions."""
 
     myargs = {
         "mystr": "mystr",

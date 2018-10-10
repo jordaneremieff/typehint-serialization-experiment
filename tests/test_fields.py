@@ -83,35 +83,44 @@ def test_number_field():
 
 
 def test_field_param_null():
-    myfield = String(null=True)
-    myfield.validate()
+    """Test the `null` instance attribute using `Field` subclasses."""
 
-    myfield2 = String()
-    myfield2.value = ""
+    string_null = String(null=True)
+    string_null.validate()
+
+    string_not_null = String()
+    string_not_null.value = ""
+
     with pytest.raises(ValidationError):
-        myfield2.validate()
+        string_not_null.validate()
 
 
-def test_field_param_min():
+def test_field_param_min_max():
+    """Test the `min` and `max` instance attributes using `Field` subclasses."""
 
-    mystr = String(min=1)
-    mystr.value = "mystr"
-    mystr.validate()
+    string_min_max = String(min=1, max=10)
+    string_min_max.value = "mystr"
+    string_min_max.validate()
 
-    mybytes = String(min=1)
-    mybytes.value = b"mybytes"
-    mybytes.validate()
+    string_min_max.value = b"mybytes"
+    string_min_max.validate()
 
-    myint = Integer(min=1)
-    myint.value = 1
-    myint.validate()
+    integer_min_max = Integer(min=1, max=10)
+    integer_min_max.value = 1
+    integer_min_max.validate()
 
-    mystr2 = String(min=10)
-    mystr2.value = "mystr"
+    float_min_max = Float(min=0.01, max=1.1)
+    float_min_max.value = 1.00
+    float_min_max.validate()
+
+    string_min_max.value = "mystringistoolong"
     with pytest.raises(ValidationError):
-        mystr2.validate()
+        string_min_max.validate()
 
-    myint2 = Integer(min=10)
-    myint2.value = 1
+    integer_min_max.value = 10000
     with pytest.raises(ValidationError):
-        myint2.validate()
+        integer_min_max.validate()
+
+    float_min_max.value = 0.0001
+    with pytest.raises(ValidationError):
+        float_min_max.validate()
