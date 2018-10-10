@@ -3,9 +3,6 @@ from loamy.exceptions import ValidationError
 
 
 class Field:
-
-    value: Any = None
-
     def __init__(
         self, name: str = None, max: int = None, min: int = None, null: bool = False
     ):
@@ -33,8 +30,13 @@ class Field:
                 # Nothing more to do, nullable field value is allowed.
                 return
 
+        # Retrieve the annotation for the field value to be used when setting the
+        # acceptable types.
         annotation = self.__annotations__["value"]
 
+        # If the annotation doesn't have an `__args__` attribute (ie: not a Union[...]),
+        # then append the type and continue. Otherwise there are multiple types that
+        # must be unpacked.
         if not hasattr(annotation, "__args__"):
             self.types.append(annotation)
         else:
