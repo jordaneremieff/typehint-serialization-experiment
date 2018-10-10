@@ -84,7 +84,6 @@ def test_number_field():
 
 def test_field_param_null():
     """Test the `null` instance attribute using `Field` subclasses."""
-
     string_null = String(null=True)
     string_null.validate()
 
@@ -97,7 +96,6 @@ def test_field_param_null():
 
 def test_field_param_min_max():
     """Test the `min` and `max` instance attributes using `Field` subclasses."""
-
     string_min_max = String(min=1, max=10)
     string_min_max.value = "mystr"
     string_min_max.validate()
@@ -132,3 +130,16 @@ def test_field_param_min_max():
     number_min_max.value = 100000
     with pytest.raises(ValidationError):
         number_min_max.validate()
+
+
+def test_field_param_name():
+    """Test the `name` instance attribute."""
+    field = String(null=True)
+    assert field.name is None
+    field.validate()
+    assert field.name is None
+
+    field = String(name="name", null=True)
+    assert field.name == "name"
+    field.validate()
+    assert field.name == "name"
