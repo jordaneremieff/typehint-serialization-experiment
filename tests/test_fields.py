@@ -113,6 +113,10 @@ def test_field_param_min_max():
     float_min_max.value = 1.00
     float_min_max.validate()
 
+    number_min_max = Number(min=0.01, max=1.1)
+    number_min_max.value = 1
+    number_min_max.validate()
+
     string_min_max.value = "mystringistoolong"
     with pytest.raises(ValidationError):
         string_min_max.validate()
@@ -124,3 +128,7 @@ def test_field_param_min_max():
     float_min_max.value = 0.0001
     with pytest.raises(ValidationError):
         float_min_max.validate()
+
+    number_min_max.value = 100000
+    with pytest.raises(ValidationError):
+        number_min_max.validate()
