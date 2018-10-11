@@ -24,8 +24,18 @@ class Field:
         # also serve as an optional default.
         self.value: self.annotation = value
 
+    def __repr__(self) -> str:
+        args = ", ".join(
+            [
+                f"{key}={getattr(self, key)}"
+                for key in ("name", "value", "max", "min", "null")
+            ]
+        )
+        return f"<{self.__class__.__name__}({args})>"
+
     def set_types(self, annotation: Any) -> None:
         """Recursively unpack the annotation and extend the accepted field types."""
+
         if hasattr(annotation, "__args__"):
             params = annotation.__args__
             self.set_types(params)
@@ -34,11 +44,14 @@ class Field:
 
     def validate(self) -> None:
         """Validate the provided field value."""
+
         if self.value in (None, ""):
+
             # Ensure that the value of the field passes the nullable test.
             if not self.null:
                 raise ValidationError("Undefined value for non-nullable field")
             else:
+
                 # Nothing more to do, nullable field value is allowed.
                 return
 

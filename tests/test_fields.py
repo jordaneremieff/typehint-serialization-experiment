@@ -154,3 +154,8 @@ def test_field_param_value():
     assert field.value == "myteststr"
     field.validate()
     assert field.value == "myteststr"
+
+
+def test_field_repr():
+    field = String(value="mystr", null=True, min=1, max=10)
+    assert repr(field) == "<String(name=None, value=mystr, max=10, min=1, null=True)>"

@@ -19,6 +19,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Jordan Eremieff",
     author_email="jordan@eremieff.com",
+    entry_points={"console_scripts": ["loamy=loamy.cli:cli"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",

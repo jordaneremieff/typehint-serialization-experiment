@@ -11,17 +11,17 @@ An experiment into simple, framework-agnostic REST API serialization/de-serializ
 This may change quite a bit as time goes on:
 
 ```python3
-from loamy.serializers import Serializer
+from loamy.schema import Schema
 from loamy.fields import String, Integer, Float, Number
 
 
-class MySerializer(Serializer):
+class MySchema(Schema):
     mystr = String(min=1, max=10)
     mynullstr = String(null=True)
     mybytes = String()
     myint = Integer(min=1)
     myfloat = Float(min=0.001)
-    mynumber = Number()
+    mynumber = Number(value=1)
 
 
 request_data = {
@@ -32,14 +32,14 @@ request_data = {
     "mynumber": 1.0,
 }
 
-s = MySerializer(**request_data)
+s = MySchema(**request_data)
 s.validate()
+s.serialize()
+print(s.serializer.data)
+print(s.serializer.json)
 ```
 
 
 ## todo
 
-- Determine how to handle validation state transitions
-- More complex JSON serializer
-- Nested/complex objects
-- App examples
+- lots
