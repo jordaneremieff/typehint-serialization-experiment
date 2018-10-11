@@ -143,3 +143,14 @@ def test_field_param_name():
     assert field.name == "name"
     field.validate()
     assert field.name == "name"
+
+
+def test_field_param_value():
+    """
+    Test setting the value of the field when creating the instance to serve as a default.
+    """
+
+    field = String(value="myteststr")
+    assert field.value == "myteststr"
+    field.validate()
+    assert field.value == "myteststr"

@@ -4,13 +4,25 @@ from loamy.exceptions import ValidationError
 
 class Field:
     def __init__(
-        self, name: str = None, max: int = None, min: int = None, null: bool = False
+        self,
+        name: str = None,
+        max: int = None,
+        min: int = None,
+        null: bool = False,
+        value: Any = None,
     ):
         self.name: str = name
         self.max: int = max
         self.min: int = min
         self.null: bool = null
         self.types: list = []
+
+        # Get the annotation for the field value to use when setting the allowed types.
+        self.annotation = self.__annotations__["value"]
+
+        # A subclass will define the annotation to apply to the value. This value will
+        # also serve as an optional default.
+        self.value: self.annotation = value
 
     def set_types(self, annotation: Any) -> None:
         """Recursively unpack the annotation and extend the accepted field types."""
@@ -30,17 +42,13 @@ class Field:
                 # Nothing more to do, nullable field value is allowed.
                 return
 
-        # Retrieve the annotation for the field value to be used when setting the
-        # acceptable types.
-        annotation = self.__annotations__["value"]
-
         # If the annotation doesn't have an `__args__` attribute (ie: not a Union[...]),
         # then append the type and continue. Otherwise there are multiple types that
         # must be unpacked.
-        if not hasattr(annotation, "__args__"):
-            self.types.append(annotation)
+        if not hasattr(self.annotation, "__args__"):
+            self.types.append(self.annotation)
         else:
-            self.set_types(annotation)
+            self.set_types(self.annotation)
 
         # Ensure the field's value is an acceptable type.
         if not isinstance(self.value, tuple(self.types)):
@@ -70,19 +78,11 @@ class String(Field):
 
     value: Union[str, bytes] = None
 
-    def __init__(self, value: Union[str, bytes] = None, **kwargs) -> None:
-        self.value: Union[str, bytes] = value
-        super().__init__(**kwargs)
-
 
 class Integer(Field):
     """A field for only `int` type."""
 
     value: int = None
-
-    def __init__(self, value: int = None, **kwargs) -> None:
-        self.value: int = value
-        super().__init__(**kwargs)
 
 
 class Float(Field):
@@ -90,16 +90,8 @@ class Float(Field):
 
     value: float = None
 
-    def __init__(self, value: float = None, **kwargs) -> None:
-        self.value: float = value
-        super().__init__(**kwargs)
-
 
 class Number(Field):
     """A field for both `int` and `float` types."""
 
     value: Union[int, float] = None
-
-    def __init__(self, value: Union[int, float] = None, **kwargs) -> None:
-        self.value: Union[int, float] = value
-        super().__init__(**kwargs)
