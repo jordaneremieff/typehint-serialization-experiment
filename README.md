@@ -3,8 +3,21 @@
 ![build](https://travis-ci.com/erm/loamy.svg?branch=master)
 ![black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
-An experiment into REST API schemas and serialization.
+An experiment into REST API schemas and serialization. ***Work in progress.***
 
+## Installation
+
+You can install using `pip`:
+
+```
+pip install loamy
+```
+
+...but this is changing a lot at the moment, recommended to clone the repo locally:
+
+```
+git clone https://github.com/erm/loamy.git
+```
 
 ## Usage
 
