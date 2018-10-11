@@ -1,4 +1,5 @@
 from inspect import getmembers
+from typing import Any
 from loamy.fields import String, Integer, Float, Number
 from loamy.serializers import Serializer
 
@@ -11,18 +12,20 @@ class Schema:
         """Build `fields` dict from the defined field types and assign the field values."""
 
         fields = self.get_fields()
-
-        for name, value in kwargs.items():
-            field = fields[name]
-            field.value = value
+        for name, field in fields.items():
 
             # Unless explicitly defined in the field definition, a field does not have
             # a name, assign it here if undefined.
             if field.name is None:
                 field.name = name
 
+        # Set any default values.
+        for name, value in kwargs.items():
+            field = fields[name]
+            field.value = value
+
         self.fields: dict = fields
-        self.serializer: Serializer = None
+        self.serializer: Serializer = self.serializer_class(fields)
 
     def validate(self) -> None:
         """Call the validation method of each field."""
@@ -30,8 +33,8 @@ class Schema:
         for field in self.fields.values():
             field.validate()
 
-    def serialize(self) -> None:
-        self.serializer = self.serializer_class(self.fields)
+    def serialize(self, data: Any, **kwargs) -> None:
+        self.serializer(data, **kwargs)
 
     def get_fields(self) -> dict:
         """Get the fields defined on the schema."""
