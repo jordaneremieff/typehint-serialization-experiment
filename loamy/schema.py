@@ -31,7 +31,7 @@ class Schema:
         self.fields: dict = fields
         self.serializer: Serializer = self.serializer_class(fields)
 
-    def __repr__(self) -> str:
+    def __repr__(self) -> str:  # pragma: no cover
         return f"<{self.__class__.__name__} fields={self.fields}>"
 
     def validate(self) -> None:

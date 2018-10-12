@@ -11,10 +11,6 @@ class Serializer:
 
     def __call__(self, data: Any, **kwargs) -> None:
         data = self.resolve(data)
-        from pprint import pprint
-
-        pprint(data)
-        print(self.fields)
 
         for name, value in data.items():
             # Iterate the request data items, update the serializer field values.

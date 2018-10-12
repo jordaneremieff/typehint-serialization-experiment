@@ -42,16 +42,12 @@ def test_serialize_object() -> None:
         user_id = 1
         name = "jordan"
 
-        def __str__(self):
-            return f"<MockModel user_id={self.user_id}, name={self.name}>"
-
     class UserSchema(Schema):
         user_id = Integer()
         name = String()
 
     schema = UserSchema()
     mock_user = MockModel()
-    print(mock_user)
     schema.serialize(mock_user)
     schema.validate()
     assert schema.serializer.data == {"name": "jordan", "user_id": 1}
@@ -93,3 +89,32 @@ def test_serializer_json() -> None:
 
     json_s = '{"mybytes": "mybytes1", "myfloat": 0.11, "myint": 2, "mynumber": 3.0, "mystr": "mystr2"}'
     assert mock_schema.serializer.json == json_s
+
+
+def test_serializer_resolve() -> None:
+    class MockModel:
+        pk: int = 1
+        username: str = "jordan"
+        profile: dict = {"metadata": "My user profile."}
+
+    class Profile(Schema):
+        metadata = String()
+
+    class User(Schema):
+        pk = Integer()
+        username = String()
+        profile = Profile()
+
+    class UserSchema(Schema):
+        user = User()
+
+    schema = UserSchema()
+    user_obj = MockModel()
+    schema.serialize({"user": user_obj})
+    assert schema.serializer.data == {
+        "user": {
+            "pk": 1,
+            "profile": {"metadata": "My user profile."},
+            "username": "jordan",
+        }
+    }
