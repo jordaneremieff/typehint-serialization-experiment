@@ -5,13 +5,13 @@ from loamy.exceptions import ValidationError
 class Field:
     def __init__(
         self,
-        name: str = None,
+        field_name: str = None,
         max: int = None,
         min: int = None,
         null: bool = False,
         value: Any = None,
     ):
-        self.name: str = name
+        self.field_name: str = field_name
         self.max: int = max
         self.min: int = min
         self.null: bool = null
@@ -28,7 +28,7 @@ class Field:
         args = ", ".join(
             [
                 f"{key}={getattr(self, key)}"
-                for key in ("name", "value", "max", "min", "null")
+                for key in ("field_name", "value", "max", "min", "null")
             ]
         )
         return f"<{self.__class__.__name__}({args})>"

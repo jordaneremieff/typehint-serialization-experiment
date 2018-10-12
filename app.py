@@ -1,37 +1,64 @@
 from loamy.schema import Schema
 from loamy.fields import String, Integer
 
-from starlette.endpoints import HTTPEndpoint
-from starlette.applications import Starlette
-from starlette.responses import JSONResponse
+
+class MockUserModel:
+    """
+    A mock user model object that contains the query data for a test user.
+    """
+
+    def __init__(self, pk: int, username: str):
+        self.pk: int = pk
+        self.username: str = username
+        self.profile: dict = {"metadata": "My user profile."}
+
+    def __str__(self) -> str:
+        return f"<MockUserModel: pk={self.pk}, username={self.username}>"
 
 
-class MockModel:
-    user_id = 1
-    name = "jordan"
+class MockUserQuery:
+    """
+    A mock query API to define test user data and a retrieval method.
+    """
+
+    users = {1: {"pk": 1, "username": "jordan"}}
+
+    def get(self, pk: int) -> MockUserModel:
+        user = self.users.get(pk)
+        return MockUserModel(**user)
 
 
-class MockQuery:
-    def get(self, user_id: int):
-        return MockModel()
+class Profile(Schema):
+    """
+    A user type schema that contains the field definitions for the model object.
+    """
+
+    metadata = String()
+
+
+class User(Schema):
+    """
+    A user type schema that contains the field definitions for the model object.
+    """
+
+    pk = Integer()
+    username = String()
+    profile = Profile()
 
 
 class UserSchema(Schema):
-    user_id = Integer()
-    name = String()
+    """A loamy Schema that contains all of the fields."""
+
+    user = User()
 
 
-app = Starlette()
+# Initialise the schema.
+schema = UserSchema()
+
+# Mock request example
+request_data = {"pk": 1}
+user_obj = MockUserQuery().get(request_data["pk"])
 
 
-@app.route("/{user_id}")
-class APIEndpoint(HTTPEndpoint):
-    async def get(self, request, user_id):
-
-        schema = UserSchema(user_id=user_id)
-        mock_user = MockQuery().get(user_id=user_id)
-        schema.serialize(mock_user)
-        schema.validate()
-        data = schema.serializer.data
-
-        return JSONResponse(data)
+schema.serialize({"user": user_obj})
+print(schema.serializer.data)

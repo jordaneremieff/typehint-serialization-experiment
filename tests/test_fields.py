@@ -135,14 +135,14 @@ def test_field_param_min_max():
 def test_field_param_name():
     """Test the `name` instance attribute."""
     field = String(null=True)
-    assert field.name is None
+    assert field.field_name is None
     field.validate()
-    assert field.name is None
+    assert field.field_name is None
 
-    field = String(name="name", null=True)
-    assert field.name == "name"
+    field = String(field_name="name", null=True)
+    assert field.field_name == "name"
     field.validate()
-    assert field.name == "name"
+    assert field.field_name == "name"
 
 
 def test_field_param_value():
@@ -158,4 +158,7 @@ def test_field_param_value():
 
 def test_field_repr():
     field = String(value="mystr", null=True, min=1, max=10)
-    assert repr(field) == "<String(name=None, value=mystr, max=10, min=1, null=True)>"
+    assert (
+        repr(field)
+        == "<String(field_name=None, value=mystr, max=10, min=1, null=True)>"
+    )

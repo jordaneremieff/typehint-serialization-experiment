@@ -42,17 +42,16 @@ def test_serialize_object() -> None:
         user_id = 1
         name = "jordan"
 
-    class MockQuery:
-        def get(self, user_id: int):
-            return MockModel()
+        def __str__(self):
+            return f"<MockModel user_id={self.user_id}, name={self.name}>"
 
     class UserSchema(Schema):
         user_id = Integer()
         name = String()
 
-    user_id = 1
-    schema = UserSchema(user_id=user_id)
-    mock_user = MockQuery().get(user_id=user_id)
+    schema = UserSchema()
+    mock_user = MockModel()
+    print(mock_user)
     schema.serialize(mock_user)
     schema.validate()
     assert schema.serializer.data == {"name": "jordan", "user_id": 1}
