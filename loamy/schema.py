@@ -9,17 +9,17 @@ class Schema:
     serializer_class: Serializer = Serializer
 
     def __init__(self, **kwargs) -> None:
-        """Build `fields` dict from the defined field types and assign the field values."""
+        """Build `fields` dict from the defined field types and assign the values."""
 
         fields = self.get_fields()
         for name, field in fields.items():
 
-            # Unless explicitly defined in the field definition, a field does not have
-            # a name, assign it here if undefined.
+            # A field name may be passed in the field constructor, otherwise assign its
+            # default name.
             if field.name is None:
                 field.name = name
 
-        # Set any default values.
+        # Set any default values passed in the field constructor.
         for name, value in kwargs.items():
             field = fields[name]
             field.value = value

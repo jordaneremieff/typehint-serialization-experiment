@@ -16,14 +16,17 @@ class Serializer:
             # If the object can already be represented as a dict, then avoid the lookup
             # in the conversion process.
             if hasattr(data, "_asdict"):
+
                 # Namedtuples support this method.
                 data = data._asdict()
-
             elif not hasattr(data, "__getitem__"):
+
                 # Inspect the members of the object and pull out any relevant fields.
                 data = {k: v for k, v in getmembers(data) if k in self.fields}
 
         for name, value in data.items():
+
+            # Iterate the request data items, update the serializer field values.
             if name in self.fields:
                 self.fields[name].value = value
 
